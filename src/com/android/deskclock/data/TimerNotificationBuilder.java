@@ -260,6 +260,7 @@ class TimerNotificationBuilder {
         }
 
         NotificationUtils.createChannel(context, FIRING_NOTIFICATION_CHANNEL_ID);
+        notification.setContentTitle(stateText);
         return notification.build();
     }
 
