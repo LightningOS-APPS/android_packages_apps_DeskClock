@@ -124,7 +124,9 @@ public final class SettingsActivity extends ToolbarBaseActivity {
                                 picker.getHour(), picker.getMinute());
                         sp.edit().putString("bedtime_time", t).apply();
                         bedtimeTime.setSummary(t);
-                        com.android.deskclock.alarms.Bedtime.schedule(requireContext());
+                        android.widget.Toast.makeText(requireContext(),
+                                com.android.deskclock.alarms.Bedtime.scheduleStatus(requireContext()),
+                                android.widget.Toast.LENGTH_LONG).show();
                     });
                     picker.show(getChildFragmentManager(), "bedtime_picker");
                     return true;

@@ -56,12 +56,14 @@ public final class Bedtime {
     }
 
     /** Schedules (or cancels) the next reminder. Safe to call any time. */
-    public static void schedule(Context c) {
+    public static void schedule(Context c) { scheduleStatus(c); }
+
+    public static String scheduleStatus(Context c) {
         try {
             final AlarmManager am = c.getSystemService(AlarmManager.class);
-            if (am == null) return;
+            if (am == null) return "no alarm manager";
             am.cancel(pending(c));
-            if (!enabled(c)) return;
+            if (!enabled(c)) return "reminder is off";
             final String[] hm = time(c).split(":");
             final Calendar next = Calendar.getInstance();
             next.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hm[0]));
@@ -69,8 +71,11 @@ public final class Bedtime {
             next.set(Calendar.SECOND, 0);
             next.set(Calendar.MILLISECOND, 0);
             if (!next.after(Calendar.getInstance())) next.add(Calendar.DAY_OF_YEAR, 1);
-            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pending(c));
-        } catch (Exception ignored) { }
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pending(c));
+            return "Bedtime reminder set for " + DateFormat.format("EEE HH:mm", next);
+        } catch (Exception e) {
+            return "error: " + e;
+        }
     }
 
     static void notifyNow(Context c) {
