@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -100,7 +101,7 @@ public final class TimerCircleView extends View {
         final float redPercent;
         if (mTimer.isReset()) {
             // Draw a complete white circle; no red arc required.
-            canvas.drawCircle(xCenter, yCenter, radius, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, 0, 360, mPaint);
 
             // Red percent is 0 since no timer progress has been made.
             redPercent = 0;
@@ -108,7 +109,7 @@ public final class TimerCircleView extends View {
             mPaint.setColor(mCompletedColor);
 
             // Draw a complete circle; no arc required.
-            canvas.drawCircle(xCenter, yCenter, radius, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, 0, 360, mPaint);
 
             // Red percent is 1 since the timer has expired.
             redPercent = 1;
@@ -122,22 +123,47 @@ public final class TimerCircleView extends View {
             final float whitePercent = 1 - redPercent;
 
             // Draw a white arc to indicate the amount of timer that remains.
-            canvas.drawArc(mArcRect, 270, whitePercent * 360, false, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, 270, whitePercent * 360, mPaint);
 
             // Draw a red arc to indicate the amount of timer completed.
             mPaint.setColor(mCompletedColor);
-            canvas.drawArc(mArcRect, 270, -redPercent * 360 , false, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, 270, -redPercent * 360, mPaint);
         }
 
         // Draw a dot to indicate current progress through the timer.
         final float dotAngleDegrees = 270 - redPercent * 360;
         final double dotAngleRadians = Math.toRadians(dotAngleDegrees);
-        final float dotX = xCenter + (float) (radius * Math.cos(dotAngleRadians));
-        final float dotY = yCenter + (float) (radius * Math.sin(dotAngleRadians));
+        final float dotX = xCenter + (float) (waveRadius(radius, dotAngleRadians) * Math.cos(dotAngleRadians));
+        final float dotY = yCenter + (float) (waveRadius(radius, dotAngleRadians) * Math.sin(dotAngleRadians));
         canvas.drawCircle(dotX, dotY, mDotRadius, mFill);
 
         if (mTimer.isRunning()) {
             postInvalidateOnAnimation();
         }
+    }
+    private final Path mWavePath = new Path();
+
+    private float waveAmp() {
+        return 2.5f * getResources().getDisplayMetrics().density;
+    }
+
+    private float waveRadius(float r, double angleRadians) {
+        final float amp = waveAmp();
+        return (float) (r - amp + amp * Math.sin(20 * angleRadians));
+    }
+
+    private void drawWavyArc(Canvas canvas, float cx, float cy, float r,
+            float startDeg, float sweepDeg, Paint paint) {
+        final int steps = Math.max(2, (int) (Math.abs(sweepDeg) * 2));
+        mWavePath.reset();
+        for (int i = 0; i <= steps; i++) {
+            final double a = Math.toRadians(startDeg + sweepDeg * i / steps);
+            final float rr = waveRadius(r, a);
+            final float x = (float) (cx + rr * Math.cos(a));
+            final float y = (float) (cy + rr * Math.sin(a));
+            if (i == 0) mWavePath.moveTo(x, y); else mWavePath.lineTo(x, y);
+        }
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        canvas.drawPath(mWavePath, paint);
     }
 }
