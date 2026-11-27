@@ -326,6 +326,7 @@
         <item name="cornerSize">30%</item>
     </style>
     <style name="TextAppearance.DeskClock.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>
     </style>
@@ -337,5 +338,10 @@
     <style name="ShapeAppearance.DeskClock.Snackbar" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
+    </style>
+    <style name="TextAppearance.DeskClock.SettingsTitle" parent="@android:style/TextAppearance.Material.Widget.ActionBar.Title">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">22sp</item>
     </style>
 </resources>
