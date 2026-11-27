@@ -18,6 +18,11 @@
 <resources>
 
     <style name="Theme.DeskClock" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.DeskClock.Title</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.DeskClock.Title</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.DeskClock.Title</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="fontFamily">@font/google_sans</item>
         <item name="android:colorBackgroundFloating">?attr/colorBackgroundFloating</item>
         <item name="android:navigationBarColor">?android:attr/colorBackground</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
