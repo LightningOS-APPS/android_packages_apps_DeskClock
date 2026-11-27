@@ -88,6 +88,15 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        final int[][] presets = {{0, 5, 0}, {0, 10, 0}, {0, 15, 0}};
+        final int[] presetIds = {R.id.timer_preset_1, R.id.timer_preset_2, R.id.timer_preset_3};
+        for (int i = 0; i < presetIds.length; i++) {
+            final int[] p = presets[i];
+            final View b = findViewById(presetIds[i]);
+            if (b != null) b.setOnClickListener(v -> setPreset(p[0], p[1], p[2]));
+        }
+
+
         mTimeView = findViewById(R.id.timer_setup_time);
         mDeleteView = findViewById(R.id.timer_setup_delete);
         mDigitViews = new TextView[] {
@@ -325,5 +334,17 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
             }
             updateTime();
         }
+    }
+    private void setPreset(int h, int m, int sec) {
+        final boolean wasEmpty = !hasValidInput();
+        final int[] d = {sec % 10, sec / 10, m % 10, m / 10, h % 10, h / 10};
+        mInputPointer = -1;
+        for (int i = 0; i < mInput.length; i++) {
+            mInput[i] = d[i];
+            if (d[i] != 0) mInputPointer = i;
+        }
+        updateTime();
+        if (wasEmpty != !hasValidInput()) updateFab();
+        if (mFabContainer != null) mFabContainer.updateFab(FAB_REQUEST_FOCUS);
     }
 }
