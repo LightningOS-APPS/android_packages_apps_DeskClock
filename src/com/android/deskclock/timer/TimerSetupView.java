@@ -403,7 +403,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
         row.addView(sec); row.addView(presetLabel("s"));
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
-                .setTitle("Edit preset")
+                .setTitle(getContext().getString(com.android.deskclock.R.string.cl_edit_preset))
                 .setView(row)
                 .setPositiveButton(android.R.string.ok, (d, w) -> {
                     final int total = h.getValue() * 3600 + m.getValue() * 60 + sec.getValue();
@@ -411,7 +411,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
                     presetPrefs().edit().putInt("p" + idx, total).apply();
                     b.setText(formatPreset(getPreset(idx)));
                 })
-                .setNeutralButton("Reset", (d, w) -> {
+                .setNeutralButton(getContext().getString(com.android.deskclock.R.string.cl_reset), (d, w) -> {
                     presetPrefs().edit().remove("p" + idx).apply();
                     b.setText(formatPreset(getPreset(idx)));
                 })

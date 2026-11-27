@@ -127,7 +127,7 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
             preemptiveDismissButton.setText(dismissText);
             if (alarm.instanceState == com.android.deskclock.provider.AlarmInstance.SILENT_STATE
                     && alarmInstance != null) {
-                preemptiveDismissButton.setText("Skip next: " + android.text.format.DateFormat.format(
+                preemptiveDismissButton.setText(preemptiveDismissButton.getContext().getString(com.android.deskclock.R.string.cl_skip_next) + android.text.format.DateFormat.format(
                     android.text.format.DateFormat.is24HourFormat(preemptiveDismissButton.getContext())
                             ? "EEE HH:mm" : "EEE h:mm a",
                     alarmInstance.getAlarmTime()).toString());

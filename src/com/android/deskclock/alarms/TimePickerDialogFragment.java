@@ -76,7 +76,7 @@ public class TimePickerDialogFragment extends DialogFragment {
                                     : com.google.android.material.timepicker.TimeFormat.CLOCK_12H)
                             .setHour(h)
                             .setMinute(m)
-                            .setTitleText("Set alarm time")
+                            .setTitleText(parentFragment.requireContext().getString(com.android.deskclock.R.string.cl_set_alarm_time))
                             .build();
             final OnTimeSetListener listener = (OnTimeSetListener) parentFragment;
             picker.addOnPositiveButtonClickListener(

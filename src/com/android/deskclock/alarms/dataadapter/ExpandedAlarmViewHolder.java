@@ -438,7 +438,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         final android.content.Context ctx = row.getContext();
         final Runnable refresh = () -> {
             final String l = com.android.deskclock.alarms.AlarmDates.label(ctx, alarm, null);
-            row.setText(l == null ? "Pick date" : l);
+            row.setText(l == null ? ctx.getString(com.android.deskclock.R.string.cl_pick_date) : l);
         };
         refresh.run();
         row.setOnClickListener(v -> com.android.deskclock.alarms.AlarmDates.pick(ctx,

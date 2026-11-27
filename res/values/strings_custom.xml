@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cl_alarm_set_for">"Alarm set for "</string>
+    <string name="cl_bed_next_alarm" formatted="false">Next alarm %s, so you\'d get %d h %d min of sleep.</string>
+    <string name="cl_bedtime">Bedtime</string>
+    <string name="cl_bedtime_reminder">Bedtime reminder</string>
+    <string name="cl_bedtime_set_for">"Bedtime reminder set for "</string>
+    <string name="cl_bedtime_summary">A nightly reminder with how much sleep you\'ll get</string>
+    <string name="cl_clear">Clear</string>
+    <string name="cl_date_cleared">Date cleared. Turn the alarm off and on to reset it.</string>
+    <string name="cl_dates_one_time">Dates are for one-time alarms. Turn off the repeat days first.</string>
+    <string name="cl_dismiss">Dismiss</string>
+    <string name="cl_edit_preset">Edit preset</string>
+    <string name="cl_loading_weather">Loading weather…</string>
+    <string name="cl_no_stats">No data yet. Stats are recorded when you snooze or dismiss an alarm.</string>
+    <string name="cl_not_quite">Not quite. Check the spelling.</string>
+    <string name="cl_pick_date">Pick date</string>
+    <string name="cl_reminder_off">reminder is off</string>
+    <string name="cl_reset">Reset</string>
+    <string name="cl_set_alarm_time">Set alarm time</string>
+    <string name="cl_shake_title">Shake your phone!</string>
+    <string name="cl_skip_next">"Skip next: "</string>
+    <string name="cl_snooze">Snooze</string>
+    <string name="cl_stats_summary" formatted="false">Average wake-up: %s\nAverage snoozes: %.1f\nDays tracked: %d</string>
+    <string name="cl_sunrise">Sunrise alarm</string>
+    <string name="cl_sunrise_summary">Screen fades from night to sunrise while the alarm rings</string>
+    <string name="cl_tap_weather">Tap to show weather</string>
+    <string name="cl_time_for_bed">Time for bed</string>
+    <string name="cl_try_again">Try again</string>
+    <string name="cl_turn_on_to_activate">. Turn the alarm on to activate it.</string>
+    <string name="cl_type_prefix">"Type: "</string>
+    <string name="cl_w_clear">Clear</string>
+    <string name="cl_w_cloudy">Cloudy</string>
+    <string name="cl_w_drizzle">Drizzle</string>
+    <string name="cl_w_fog">Fog</string>
+    <string name="cl_w_generic">Weather</string>
+    <string name="cl_w_partly_cloudy">Partly cloudy</string>
+    <string name="cl_w_rain">Rain</string>
+    <string name="cl_w_showers">Showers</string>
+    <string name="cl_w_snow">Snow</string>
+    <string name="cl_w_snow_showers">Snow showers</string>
+    <string name="cl_w_thunder">Thunderstorms</string>
+    <string name="cl_wake_challenge">Wake-up challenge</string>
+    <string name="cl_wake_stats">Wake-up stats</string>
+    <string name="cl_wake_stats_summary">Snoozes and wake-up times for the last 30 days</string>
+    <string name="cl_weather_unavailable">Weather unavailable</string>
+    <string name="cl_wind_down">Time to wind down.</string>
+    <string-array name="cl_wake_phrases">
+        <item>I am awake and getting up</item>
+        <item>Today is going to be a good day</item>
+        <item>No more snoozing for me</item>
+        <item>Rise and shine it is morning</item>
+    </string-array>
+</resources>

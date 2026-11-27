@@ -63,7 +63,7 @@ public final class Bedtime {
             final AlarmManager am = c.getSystemService(AlarmManager.class);
             if (am == null) return "no alarm manager";
             am.cancel(pending(c));
-            if (!enabled(c)) return "reminder is off";
+            if (!enabled(c)) return c.getString(com.android.deskclock.R.string.cl_reminder_off);
             final String[] hm = time(c).split(":");
             final Calendar next = Calendar.getInstance();
             next.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hm[0]));
@@ -72,7 +72,7 @@ public final class Bedtime {
             next.set(Calendar.MILLISECOND, 0);
             if (!next.after(Calendar.getInstance())) next.add(Calendar.DAY_OF_YEAR, 1);
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(), pending(c));
-            return "Bedtime reminder set for " + DateFormat.format("EEE HH:mm", next);
+            return c.getString(com.android.deskclock.R.string.cl_bedtime_set_for) + DateFormat.format("EEE HH:mm", next);
         } catch (Exception e) {
             return "error: " + e;
         }
@@ -82,10 +82,10 @@ public final class Bedtime {
         final NotificationManager nm = c.getSystemService(NotificationManager.class);
         if (nm == null) return;
         nm.deleteNotificationChannel("bedtime");
-        nm.createNotificationChannel(new NotificationChannel(CHANNEL, "Bedtime",
+        nm.createNotificationChannel(new NotificationChannel(CHANNEL, c.getString(com.android.deskclock.R.string.cl_bedtime),
                 NotificationManager.IMPORTANCE_HIGH));
 
-        String text = "Time to wind down.";
+        String text = c.getString(com.android.deskclock.R.string.cl_wind_down);
         final AlarmManager am = c.getSystemService(AlarmManager.class);
         final AlarmManager.AlarmClockInfo next = am == null ? null : am.getNextAlarmClock();
         if (next != null) {
@@ -96,14 +96,14 @@ public final class Bedtime {
                 final String when = DateFormat.format(
                         DateFormat.is24HourFormat(c) ? "EEE HH:mm" : "EEE h:mm a", t).toString();
                 text = String.format(Locale.getDefault(),
-                        "Next alarm %s, so you'd get %d h %d min of sleep.", when, mins / 60, mins % 60);
+                        c.getString(com.android.deskclock.R.string.cl_bed_next_alarm), when, mins / 60, mins % 60);
             }
         }
         final PendingIntent open = PendingIntent.getActivity(c, 0,
                 new Intent(c, DeskClock.class), PendingIntent.FLAG_IMMUTABLE);
         nm.notify(NOTIF_ID, new NotificationCompat.Builder(c, CHANNEL)
                 .setSmallIcon(R.drawable.stat_notify_alarm)
-                .setContentTitle("Time for bed")
+                .setContentTitle(c.getString(com.android.deskclock.R.string.cl_time_for_bed))
                 .setContentText(text)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setContentIntent(open)

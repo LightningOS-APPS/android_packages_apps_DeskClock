@@ -693,8 +693,8 @@ public class AlarmActivity extends BaseActivity
                 .setTitle(a + " + " + b + " = ?")
                 .setView(input)
                 .setCancelable(false)
-                .setPositiveButton("Dismiss", null)
-                .setNeutralButton("Snooze", (x, w) -> snooze())
+                .setPositiveButton(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_dismiss), null)
+                .setNeutralButton(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_snooze), (x, w) -> snooze())
                 .create();
         d.setOnShowListener(x -> d.getButton(android.content.DialogInterface.BUTTON_POSITIVE)
                 .setOnClickListener(v -> {
@@ -703,7 +703,7 @@ public class AlarmActivity extends BaseActivity
                         dismissNow();
                     } else {
                         input.setText("");
-                        input.setError("Try again");
+                        input.setError(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_try_again));
                     }
                 }));
         d.show();
@@ -800,21 +800,17 @@ public class AlarmActivity extends BaseActivity
             public void onAccuracyChanged(android.hardware.Sensor s, int a) { }
         };
         dlg[0] = new android.app.AlertDialog.Builder(this)
-                .setTitle("Shake your phone!")
+                .setTitle(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_shake_title))
                 .setView(counter)
                 .setCancelable(false)
-                .setNeutralButton("Snooze", (x, w) -> { sm.unregisterListener(l); snooze(); })
+                .setNeutralButton(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_snooze), (x, w) -> { sm.unregisterListener(l); snooze(); })
                 .create();
         dlg[0].show();
         sm.registerListener(l, acc, android.hardware.SensorManager.SENSOR_DELAY_GAME);
     }
 
     private void showPhraseChallenge() {
-        final String[] phrases = {
-                "I am awake and getting up",
-                "Today is going to be a good day",
-                "No more snoozing for me",
-                "Rise and shine it is morning"};
+        final String[] phrases = getResources().getStringArray(com.android.deskclock.R.array.cl_wake_phrases);
         final String phrase = phrases[new java.util.Random().nextInt(phrases.length)];
         final android.widget.EditText input = new android.widget.EditText(this);
         input.setHint(phrase);
@@ -822,11 +818,11 @@ public class AlarmActivity extends BaseActivity
                 | android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
         final android.app.AlertDialog d = new android.app.AlertDialog.Builder(this)
-                .setTitle("Type: " + phrase)
+                .setTitle(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_type_prefix) + phrase)
                 .setView(input)
                 .setCancelable(false)
-                .setPositiveButton("Dismiss", null)
-                .setNeutralButton("Snooze", (x, w) -> snooze())
+                .setPositiveButton(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_dismiss), null)
+                .setNeutralButton(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_snooze), (x, w) -> snooze())
                 .create();
         d.setOnShowListener(x -> d.getButton(android.content.DialogInterface.BUTTON_POSITIVE)
                 .setOnClickListener(v -> {
@@ -835,7 +831,7 @@ public class AlarmActivity extends BaseActivity
                         d.dismiss();
                         dismissNow();
                     } else {
-                        input.setError("Not quite. Check the spelling.");
+                        input.setError(AlarmActivity.this.getString(com.android.deskclock.R.string.cl_not_quite));
                     }
                 }));
         d.show();

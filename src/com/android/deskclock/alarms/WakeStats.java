@@ -62,11 +62,10 @@ public final class WakeStats {
         final List<String> recs = load(c);
         final com.google.android.material.dialog.MaterialAlertDialogBuilder b =
                 new com.google.android.material.dialog.MaterialAlertDialogBuilder(c)
-                        .setTitle("Wake-up stats")
+                        .setTitle(c.getString(com.android.deskclock.R.string.cl_wake_stats))
                         .setPositiveButton(android.R.string.ok, null);
         if (recs.isEmpty()) {
-            b.setMessage("No data yet. Stats are recorded when you dismiss an alarm "
-                    + "from the ringing screen.").show();
+            b.setMessage(c.getString(com.android.deskclock.R.string.cl_no_stats)).show();
             return;
         }
         final List<int[]> data = new ArrayList<>();
@@ -118,7 +117,7 @@ public final class WakeStats {
         summary.setTextSize(15);
         summary.setPadding(0, (int) (16 * d), 0, 0);
         summary.setText(String.format(Locale.getDefault(),
-                "Average wake-up: %s\nAverage snoozes: %.1f\nDays tracked: %d",
+                c.getString(com.android.deskclock.R.string.cl_stats_summary),
                 hhmm(sumMin / n), sumSnooze / (float) n, n));
 
         final LinearLayout box = new LinearLayout(c);

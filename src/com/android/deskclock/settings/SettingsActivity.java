@@ -117,7 +117,7 @@ public final class SettingsActivity extends ToolbarBaseActivity {
                                             : com.google.android.material.timepicker.TimeFormat.CLOCK_12H)
                                     .setHour(Integer.parseInt(hm[0]))
                                     .setMinute(Integer.parseInt(hm[1]))
-                                    .setTitleText("Bedtime")
+                                    .setTitleText(requireContext().getString(com.android.deskclock.R.string.cl_bedtime))
                                     .build();
                     picker.addOnPositiveButtonClickListener(v -> {
                         final String t = String.format(java.util.Locale.US, "%02d:%02d",

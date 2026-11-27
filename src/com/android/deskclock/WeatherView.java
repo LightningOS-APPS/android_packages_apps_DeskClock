@@ -65,12 +65,12 @@ public class WeatherView extends AppCompatTextView {
         final String cached = prefs().getString("text", null);
         if (cached != null) setText(cached);
         if (!hasPermission()) {
-            if (cached == null) setText("Tap to show weather");
+            if (cached == null) setText(getContext().getString(com.android.deskclock.R.string.cl_tap_weather));
             return;
         }
         if (!force && cached != null
                 && System.currentTimeMillis() - prefs().getLong("time", 0) < MAX_AGE) return;
-        if (cached == null) setText("Loading weather…");
+        if (cached == null) setText(getContext().getString(com.android.deskclock.R.string.cl_loading_weather));
         final Location loc = lastLocation();
         if (loc != null) {
             fetch(loc);
@@ -79,10 +79,10 @@ public class WeatherView extends AppCompatTextView {
                 final LocationManager lm = getContext().getSystemService(LocationManager.class);
                 lm.getCurrentLocation(LocationManager.NETWORK_PROVIDER, null,
                         getContext().getMainExecutor(), l -> {
-                            if (l != null) fetch(l); else if (cached == null) setText("Weather unavailable");
+                            if (l != null) fetch(l); else if (cached == null) setText(getContext().getString(com.android.deskclock.R.string.cl_weather_unavailable));
                         });
             } catch (Exception e) {
-                if (cached == null) setText("Weather unavailable");
+                if (cached == null) setText(getContext().getString(com.android.deskclock.R.string.cl_weather_unavailable));
             }
         }
     }
@@ -130,7 +130,7 @@ public class WeatherView extends AppCompatTextView {
                 prefs().edit().putString("text", text).putLong("time", System.currentTimeMillis()).apply();
                 mMain.post(() -> setText(text));
             } catch (Exception e) {
-                mMain.post(() -> { if (prefs().getString("text", null) == null) setText("Weather unavailable"); });
+                mMain.post(() -> { if (prefs().getString("text", null) == null) setText(getContext().getString(com.android.deskclock.R.string.cl_weather_unavailable)); });
             }
         }).start();
     }
@@ -149,17 +149,17 @@ public class WeatherView extends AppCompatTextView {
         return "🌡️";
     }
 
-    private static String describe(int c) {
-        if (c == 0) return "Clear";
-        if (c <= 2) return "Partly cloudy";
-        if (c == 3) return "Cloudy";
-        if (c == 45 || c == 48) return "Fog";
-        if (c >= 51 && c <= 57) return "Drizzle";
-        if (c >= 61 && c <= 67) return "Rain";
-        if (c >= 71 && c <= 77) return "Snow";
-        if (c >= 80 && c <= 82) return "Showers";
-        if (c == 85 || c == 86) return "Snow showers";
-        if (c >= 95) return "Thunderstorms";
-        return "Weather";
+    private String describe(int c) {
+        if (c == 0) return getContext().getString(com.android.deskclock.R.string.cl_w_clear);
+        if (c <= 2) return getContext().getString(com.android.deskclock.R.string.cl_w_partly_cloudy);
+        if (c == 3) return getContext().getString(com.android.deskclock.R.string.cl_w_cloudy);
+        if (c == 45 || c == 48) return getContext().getString(com.android.deskclock.R.string.cl_w_fog);
+        if (c >= 51 && c <= 57) return getContext().getString(com.android.deskclock.R.string.cl_w_drizzle);
+        if (c >= 61 && c <= 67) return getContext().getString(com.android.deskclock.R.string.cl_w_rain);
+        if (c >= 71 && c <= 77) return getContext().getString(com.android.deskclock.R.string.cl_w_snow);
+        if (c >= 80 && c <= 82) return getContext().getString(com.android.deskclock.R.string.cl_w_showers);
+        if (c == 85 || c == 86) return getContext().getString(com.android.deskclock.R.string.cl_w_snow_showers);
+        if (c >= 95) return getContext().getString(com.android.deskclock.R.string.cl_w_thunder);
+        return getContext().getString(com.android.deskclock.R.string.cl_w_generic);
     }
 }

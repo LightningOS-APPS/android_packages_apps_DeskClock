@@ -65,7 +65,7 @@ public final class AlarmDates {
     public static void pick(Context c, Alarm alarm, AlarmInstance inst, Runnable after) {
         if (alarm == null) return;
         if (alarm.daysOfWeek.isRepeating()) {
-            Toast.makeText(c, "Dates are for one-time alarms. Turn off the repeat days first.",
+            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_dates_one_time),
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -90,15 +90,15 @@ public final class AlarmDates {
             }
             if (status.contains("error")) Toast.makeText(c, status, Toast.LENGTH_LONG).show();
             if (after != null) after.run();
-            Toast.makeText(c, "Alarm set for " + DateFormat.format("EEE d MMM", sel)
-                    + (inst == null ? ". Turn the alarm on to activate it." : ""),
+            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_alarm_set_for) + DateFormat.format("EEE d MMM", sel)
+                    + (inst == null ? c.getString(com.android.deskclock.R.string.cl_turn_on_to_activate) : ""),
                     Toast.LENGTH_LONG).show();
         }, start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH));
         dlg.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        dlg.setButton(DialogInterface.BUTTON_NEUTRAL, "Clear", (d, w) -> {
+        dlg.setButton(DialogInterface.BUTTON_NEUTRAL, c.getString(com.android.deskclock.R.string.cl_clear), (d, w) -> {
             prefs(c).edit().remove("a" + alarm.id).apply();
             if (after != null) after.run();
-            Toast.makeText(c, "Date cleared. Turn the alarm off and on to reset it.",
+            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_date_cleared),
                     Toast.LENGTH_LONG).show();
         });
         dlg.show();

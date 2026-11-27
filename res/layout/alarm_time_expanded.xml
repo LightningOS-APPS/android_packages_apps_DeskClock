@@ -157,7 +157,7 @@
         android:paddingStart="@dimen/icon_margin"
         android:paddingEnd="@dimen/icon_margin"
         android:singleLine="true"
-        android:text="Pick date"
+        android:text="@string/cl_pick_date"
         android:textAppearance="@style/body"
         app:drawableStartCompat="@drawable/ic_calendar"
         app:layout_constraintEnd_toStartOf="@id/end_guide_thin"

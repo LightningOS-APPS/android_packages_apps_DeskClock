@@ -153,33 +153,33 @@
             app:iconSpaceReserved="false"  />
         <ListPreference
             android:key="wake_challenge"
-            android:title="Wake-up challenge"
+            android:title="@string/cl_wake_challenge"
             android:entries="@array/wake_challenge_entries"
             android:entryValues="@array/wake_challenge_values"
-            android:dialogTitle="Wake-up challenge"
+            android:dialogTitle="@string/cl_wake_challenge"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:key="wake_stats"
-            android:title="Wake-up stats"
-            android:summary="Snoozes and wake-up times for the last 30 days" />
+            android:title="@string/cl_wake_stats"
+            android:summary="@string/cl_wake_stats_summary" />
 
         <SwitchPreferenceCompat
             android:key="bedtime_enabled"
             android:defaultValue="false"
-            android:title="Bedtime reminder"
-            android:summary="A nightly reminder with how much sleep you'll get" />
+            android:title="@string/cl_bedtime_reminder"
+            android:summary="@string/cl_bedtime_summary" />
 
         <Preference
             android:key="bedtime_time"
-            android:title="Bedtime"
+            android:title="@string/cl_bedtime"
             android:dependency="bedtime_enabled" />
 
     <SwitchPreferenceCompat
             android:key="sunrise_alarm"
             android:defaultValue="false"
-            android:title="Sunrise alarm"
-            android:summary="Screen fades from night to sunrise while the alarm rings" />
+            android:title="@string/cl_sunrise"
+            android:summary="@string/cl_sunrise_summary" />
 
     </PreferenceCategory>
 
