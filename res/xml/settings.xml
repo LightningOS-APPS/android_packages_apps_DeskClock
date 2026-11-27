@@ -208,4 +208,8 @@
             app:iconSpaceReserved="false"  />
     </PreferenceCategory>
 
+    <Preference
+        android:key="whats_new"
+        android:title="@string/cl_whats_new" />
+
 </PreferenceScreen>

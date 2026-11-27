@@ -97,6 +97,13 @@ public final class SettingsActivity extends ToolbarBaseActivity {
         public void onCreatePreferences(Bundle bundle, String rootKey) {
             getPreferenceManager().setStorageDeviceProtected();
             addPreferencesFromResource(R.xml.settings);
+            final androidx.preference.Preference whatsNew = findPreference("whats_new");
+            if (whatsNew != null) {
+                whatsNew.setOnPreferenceClickListener(p -> {
+                    com.android.deskclock.Changelog.show(requireContext());
+                    return true;
+                });
+            }
             final androidx.preference.Preference wakeStats = findPreference("wake_stats");
             if (wakeStats != null) {
                 wakeStats.setOnPreferenceClickListener(p -> {

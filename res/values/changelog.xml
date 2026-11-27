@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cl_whats_new">What\'s new</string>
+    <string name="cl_changelog"><![CDATA[
+<p><b>Material 3 Expressive</b></p>
+<ul>
+<li>Follows system light/dark mode</li>
+<li>Scalloped clock dial, accent hands and centre dots</li>
+<li>Wavy stopwatch and timer rings</li>
+<li>Pill keypad with press-to-morph keys</li>
+<li>Floating pill navigation and rounded snackbars</li>
+<li>Google Sans throughout</li>
+<li>Material clock picker and dialogs</li>
+<li>Expressive analog and digital widgets</li>
+</ul>
+<p><b>Alarms</b></p>
+<ul>
+<li>Skip the next occurrence of a repeating alarm</li>
+<li>One-time alarms on a chosen date</li>
+<li>Wake-up challenges: maths, shake or type a phrase</li>
+<li>Sunrise screen while the alarm rings</li>
+<li>Wake-up stats</li>
+<li>Bedtime reminder</li>
+</ul>
+<p><b>Timer and clock</b></p>
+<ul>
+<li>Editable timer presets</li>
+<li>Timer names and countdown in notifications</li>
+<li>Day/night indicator for world clocks</li>
+<li>Weather on the Clock tab</li>
+</ul>
+]]></string>
+</resources>
