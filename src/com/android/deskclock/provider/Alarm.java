@@ -351,7 +351,9 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         return instanceState == AlarmInstance.SNOOZE_STATE
                 || instanceState == AlarmInstance.HIGH_NOTIFICATION_STATE
                 || instanceState == AlarmInstance.LOW_NOTIFICATION_STATE
-                || instanceState == AlarmInstance.HIDE_NOTIFICATION_STATE;
+                || instanceState == AlarmInstance.HIDE_NOTIFICATION_STATE
+                || (enabled && daysOfWeek != null && daysOfWeek.isRepeating()
+                        && instanceState == AlarmInstance.SILENT_STATE);
     }
 
     public void writeToParcel(Parcel p, int flags) {
