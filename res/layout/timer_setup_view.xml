@@ -77,5 +77,6 @@
         app:layout_constraintWidth_max="315.0dip"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:layout_marginTop="48dp"
         android:layout_marginBottom="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
