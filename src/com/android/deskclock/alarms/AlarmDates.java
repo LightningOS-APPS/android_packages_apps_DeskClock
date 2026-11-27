@@ -88,7 +88,6 @@ public final class AlarmDates {
                 }
                 status += " / now: " + DateFormat.format("EEE d MMM HH:mm", inst.getAlarmTime());
             }
-            if (status.contains("error")) Toast.makeText(c, status, Toast.LENGTH_LONG).show();
             if (after != null) after.run();
             Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_alarm_set_for) + DateFormat.format("EEE d MMM", sel)
                     + (inst == null ? c.getString(com.android.deskclock.R.string.cl_turn_on_to_activate) : ""),
