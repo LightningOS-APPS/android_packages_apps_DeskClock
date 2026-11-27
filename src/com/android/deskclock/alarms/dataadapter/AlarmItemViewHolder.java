@@ -103,6 +103,9 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
     protected void bindClock(Alarm alarm) {
         clock.setTime(alarm.hour, alarm.minutes);
         clock.setAlpha(alarm.enabled ? CLOCK_ENABLED_ALPHA : CLOCK_DISABLED_ALPHA);
+        clock.setTextColor(com.android.deskclock.ThemeUtils.resolveColor(clock.getContext(),
+                alarm.enabled ? com.android.deskclock.R.attr.colorPrimary
+                        : com.android.deskclock.R.attr.colorOnSurfaceVariant));
         Typeface oldTypeface = alarm.enabled ? clock.getTypeface() : null;
         clock.setTypeface(oldTypeface, alarm.enabled ? Typeface.BOLD : Typeface.NORMAL);
     }
