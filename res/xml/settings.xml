@@ -151,6 +151,12 @@
             android:key="week_start"
             android:title="@string/week_start_title"
             app:iconSpaceReserved="false"  />
+        <SwitchPreferenceCompat
+            android:key="maths_challenge"
+            android:defaultValue="false"
+            android:title="Maths challenge"
+            android:summary="Solve a sum before an alarm can be dismissed" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

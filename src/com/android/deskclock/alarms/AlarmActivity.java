@@ -506,7 +506,7 @@ public class AlarmActivity extends BaseActivity
     /**
      * Perform dismiss animation and send dismiss intent.
      */
-    private void dismiss() {
+    private void dismissNow() {
         mAlarmHandled = true;
         LOGGER.v("Dismissed: %s", mAlarmInstance);
 
@@ -650,5 +650,56 @@ public class AlarmActivity extends BaseActivity
         });
 
         return alertAnimator;
+    }
+    private void dismiss() {
+        if (!mathsChallengeEnabled()) {
+            dismissNow();
+            return;
+        }
+        showMathsChallenge();
+    }
+
+    private boolean mathsChallengeEnabled() {
+        try {
+            if (androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+                    createDeviceProtectedStorageContext()).getBoolean("maths_challenge", false)) {
+                return true;
+            }
+        } catch (Exception ignored) { }
+        try {
+            return androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                    .getBoolean("maths_challenge", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void showMathsChallenge() {
+        final java.util.Random r = new java.util.Random();
+        final int a = 10 + r.nextInt(40);
+        final int b = 10 + r.nextInt(50);
+        final android.widget.EditText input = new android.widget.EditText(this);
+        input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        input.setTextSize(28);
+        input.setGravity(android.view.Gravity.CENTER);
+
+        final android.app.AlertDialog d = new android.app.AlertDialog.Builder(this)
+                .setTitle(a + " + " + b + " = ?")
+                .setView(input)
+                .setCancelable(false)
+                .setPositiveButton("Dismiss", null)
+                .setNeutralButton("Snooze", (x, w) -> snooze())
+                .create();
+        d.setOnShowListener(x -> d.getButton(android.content.DialogInterface.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
+                    if (input.getText().toString().trim().equals(String.valueOf(a + b))) {
+                        d.dismiss();
+                        dismissNow();
+                    } else {
+                        input.setText("");
+                        input.setError("Try again");
+                    }
+                }));
+        d.show();
     }
 }
