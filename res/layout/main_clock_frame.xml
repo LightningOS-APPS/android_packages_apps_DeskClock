@@ -66,4 +66,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"/>
+
+    <com.android.deskclock.WeatherView
+        android:id="@+id/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:background="?selectableItemBackground"
+        android:textAppearance="@style/body"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="16sp" />
 </LinearLayout>
