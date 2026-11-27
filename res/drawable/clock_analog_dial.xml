@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="@dimen/analog_clock_size"
         android:height="@dimen/analog_clock_size"
         android:viewportHeight="1176.0"
         android:viewportWidth="1176.0">
     <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M588,104.9c65.2,0 128.5,12.8 188,38c57.5,24.3 109.2,59.2 153.6,103.5c44.4,44.4 79.2,96 103.5,153.6c25.2,59.5 38,122.8 38,188s-12.8,128.5 -38,188c-24.3,57.5 -59.2,109.2 -103.5,153.6c-44.4,44.4 -96,79.2 -153.6,103.5c-59.5,25.2 -122.8,38 -188,38s-128.5,-12.8 -188,-38c-57.5,-24.3 -109.2,-59.2 -153.6,-103.5c-44.4,-44.4 -79.2,-96 -103.5,-153.6c-25.2,-59.5 -38,-122.8 -38,-188s12.8,-128.5 38,-188c24.3,-57.5 59.2,-109.2 103.5,-153.6s96,-79.2 153.6,-103.5C459.5,117.7 522.8,104.9 588,104.9M588,78.9C306.8,78.9 78.9,306.8 78.9,588s227.9,509.1 509.1,509.1s509.1,-227.9 509.1,-509.1S869.2,78.9 588,78.9L588,78.9z" />
+        android:fillColor="?attr/colorPrimaryContainer"
+        android:pathData="M588,92L609,96 630,107 649,122 667,138 685,151 703,159 723,161 744,159 768,154 792,150 815,151 836,158 853,173 865,192 874,215 882,238 890,258 902,274 918,286 938,294 961,302 984,311 1003,323 1018,340 1025,361 1026,384 1022,408 1017,432 1015,453 1017,473 1025,491 1038,509 1054,527 1069,546 1080,567 1084,588 1080,609 1069,630 1054,649 1038,667 1025,685 1017,703 1015,723 1017,744 1022,768 1026,792 1025,815 1018,836 1003,853 984,865 961,874 938,882 918,890 902,902 890,918 882,938 874,961 865,984 853,1003 836,1018 815,1025 792,1026 768,1022 744,1017 723,1015 703,1017 685,1025 667,1038 649,1054 630,1069 609,1080 588,1084 567,1080 546,1069 527,1054 509,1038 491,1025 473,1017 453,1015 432,1017 408,1022 384,1026 361,1025 340,1018 323,1003 311,984 302,961 294,938 286,918 274,902 258,890 238,882 215,874 192,865 173,853 158,836 151,815 150,792 154,768 159,744 161,723 159,703 151,685 138,667 122,649 107,630 96,609 92,588 96,567 107,546 122,527 138,509 151,491 159,473 161,453 159,432 154,408 150,384 151,361 158,340 173,323 192,311 215,302 238,294 258,286 274,274 286,258 294,238 302,215 311,192 323,173 340,158 361,151 384,150 408,154 432,159 453,161 473,159 491,151 509,138 527,122 546,107 567,96Z" />
 </vector>

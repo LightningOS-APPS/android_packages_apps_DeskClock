@@ -63,6 +63,7 @@
 
     <style name="Theme.DeskClock.MaterialSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="thumbIcon">@drawable/switch_thumb_icon</item>
+        <item name="thumbIcon">@drawable/switch_thumb_icon</item>
         <item name="thumbIconTint">@color/switch_thumb_icon</item>
     </style>
 </resources>
