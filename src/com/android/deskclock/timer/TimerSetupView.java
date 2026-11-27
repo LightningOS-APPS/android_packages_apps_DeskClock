@@ -88,12 +88,19 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        final int[][] presets = {{0, 5, 0}, {0, 10, 0}, {0, 15, 0}};
-        final int[] presetIds = {R.id.timer_preset_1, R.id.timer_preset_2, R.id.timer_preset_3};
-        for (int i = 0; i < presetIds.length; i++) {
-            final int[] p = presets[i];
-            final View b = findViewById(presetIds[i]);
-            if (b != null) b.setOnClickListener(v -> setPreset(p[0], p[1], p[2]));
+        for (int i = 0; i < PRESET_IDS.length; i++) {
+            final int idx = i;
+            final com.google.android.material.button.MaterialButton b = findViewById(PRESET_IDS[i]);
+            if (b == null) continue;
+            b.setText(formatPreset(getPreset(idx)));
+            b.setOnClickListener(v -> {
+                final int[] p = getPreset(idx);
+                setPreset(p[0], p[1], p[2]);
+            });
+            b.setOnLongClickListener(v -> {
+                editPreset(idx, b);
+                return true;
+            });
         }
 
 
@@ -346,5 +353,69 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
         updateTime();
         if (wasEmpty != !hasValidInput()) updateFab();
         if (mFabContainer != null) mFabContainer.updateFab(FAB_REQUEST_FOCUS);
+    }
+    private static final int[] PRESET_IDS =
+            {R.id.timer_preset_1, R.id.timer_preset_2, R.id.timer_preset_3};
+    private static final int[] PRESET_DEFAULT_MIN = {5, 10, 15};
+
+    private android.content.SharedPreferences presetPrefs() {
+        return getContext().getSharedPreferences("timer_presets", Context.MODE_PRIVATE);
+    }
+
+    private int[] getPreset(int i) {
+        final int t = presetPrefs().getInt("p" + i, PRESET_DEFAULT_MIN[i] * 60);
+        return new int[] {t / 3600, (t / 60) % 60, t % 60};
+    }
+
+    private static String formatPreset(int[] p) {
+        final java.util.Locale l = java.util.Locale.getDefault();
+        return p[0] > 0 ? String.format(l, "%d:%02d:%02d", p[0], p[1], p[2])
+                : String.format(l, "%d:%02d", p[1], p[2]);
+    }
+
+    private android.widget.NumberPicker presetPicker(int max, int value) {
+        final android.widget.NumberPicker n = new android.widget.NumberPicker(getContext());
+        n.setMinValue(0);
+        n.setMaxValue(max);
+        n.setValue(value);
+        n.setFormatter(v -> String.format(java.util.Locale.getDefault(), "%02d", v));
+        return n;
+    }
+
+    private android.widget.TextView presetLabel(String text) {
+        final android.widget.TextView t = new android.widget.TextView(getContext());
+        t.setText(text);
+        t.setTextSize(18);
+        t.setPadding(8, 0, 24, 0);
+        return t;
+    }
+
+    private void editPreset(int idx, com.google.android.material.button.MaterialButton b) {
+        final int[] p = getPreset(idx);
+        final android.widget.NumberPicker h = presetPicker(23, p[0]);
+        final android.widget.NumberPicker m = presetPicker(59, p[1]);
+        final android.widget.NumberPicker sec = presetPicker(59, p[2]);
+        final LinearLayout row = new LinearLayout(getContext());
+        row.setGravity(android.view.Gravity.CENTER);
+        row.setPadding(0, 32, 0, 0);
+        row.addView(h); row.addView(presetLabel("h"));
+        row.addView(m); row.addView(presetLabel("m"));
+        row.addView(sec); row.addView(presetLabel("s"));
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
+                .setTitle("Edit preset")
+                .setView(row)
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    final int total = h.getValue() * 3600 + m.getValue() * 60 + sec.getValue();
+                    if (total == 0) return;
+                    presetPrefs().edit().putInt("p" + idx, total).apply();
+                    b.setText(formatPreset(getPreset(idx)));
+                })
+                .setNeutralButton("Reset", (d, w) -> {
+                    presetPrefs().edit().remove("p" + idx).apply();
+                    b.setText(formatPreset(getPreset(idx)));
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 }
