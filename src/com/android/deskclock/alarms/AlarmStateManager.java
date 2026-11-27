@@ -614,6 +614,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      */
     public static void registerInstance(Context context, AlarmInstance instance,
             boolean updateNextAlarm) {
+        AlarmDates.apply(context, instance);
         LogUtils.i("Registering instance: " + instance.mId);
         final ContentResolver cr = context.getContentResolver();
         final Alarm alarm = Alarm.getAlarm(cr, instance.mAlarmId);

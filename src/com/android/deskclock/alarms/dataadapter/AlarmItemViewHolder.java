@@ -74,6 +74,11 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
         daysOfWeek = itemView.findViewById(R.id.days_of_week);
         preemptiveDismissButton = itemView.findViewById(R.id.preemptive_dismiss_button);
         ellipsizeLayout  = itemView.findViewById(R.id.ellipse_layout);
+        clock.setOnLongClickListener(v -> {
+            com.android.deskclock.alarms.AlarmDates.pick(v.getContext(),
+                    getItemHolder().item, getItemHolder().getAlarmInstance());
+            return true;
+        });
         preemptiveDismissButton.setOnClickListener(v -> {
             final AlarmInstance alarmInstance = getItemHolder().getAlarmInstance();
             if (alarmInstance != null) {
@@ -143,9 +148,10 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
             final String string = alarm.daysOfWeek.toAccessibilityString(context, weekdayOrder);
             daysOfWeek.setContentDescription(string);
         } else {
-            final String labelText = Alarm.isTomorrow(alarm, Calendar.getInstance()) ?
+            final String labelText = com.android.deskclock.alarms.AlarmDates.label(context, alarm,
+                    Alarm.isTomorrow(alarm, Calendar.getInstance()) ?
                     context.getString(R.string.alarm_tomorrow) :
-                    context.getString(R.string.alarm_today);
+                    context.getString(R.string.alarm_today));
             daysOfWeek.setText(labelText);
         }
     }
