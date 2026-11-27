@@ -302,7 +302,7 @@
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
-    <style name="Theme.DeskClock.DigitalWidgetConfigurationTheme" parent="Theme.Material3Expressive.DynamicColors.Dark.NoActionBar">
+    <style name="Theme.DeskClock.DigitalWidgetConfigurationTheme" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
         <item name="appWidgetConfigBackground">?attr/colorSurface</item>
         <item name="appWidgetConfigTitle">?attr/colorOnSurface</item>
         <item name="appWidgetConfigSubtitle">?attr/colorOnSurfaceVariant</item>
