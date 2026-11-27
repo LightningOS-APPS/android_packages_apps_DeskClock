@@ -92,13 +92,16 @@
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/google_sans</item>
         <item name="android:layout_margin">6dp</item>
         <item name="android:padding">0dp</item>
-        <item name="layout_constraintDimensionRatio">1:1</item>
-        <item name="autoSizeMaxTextSize">36sp</item>
+        <item name="layout_constraintDimensionRatio">3:2</item>
+        <item name="autoSizeMaxTextSize">32sp</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="backgroundTint">?attr/colorSurfaceVariant</item>
+        <item name="backgroundTint">?attr/colorSurfaceContainer</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
@@ -313,11 +316,11 @@
     </style>
     <style name="ShapeAppearance.DeskClock.TimerDigit.Circle" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">30%</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="ShapeAppearance.DeskClock.TimerDigit.Pressed" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">18%</item>
+        <item name="cornerSize">30%</item>
     </style>
 </resources>
