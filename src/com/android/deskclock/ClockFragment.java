@@ -464,6 +464,10 @@ public final class ClockFragment extends DeskClockFragment {
                         (context.getString(isAhead ? R.string.world_hours_tomorrow
                                 : R.string.world_hours_yesterday, timeString))
                         : timeString);
+            final int cityHour = java.util.Calendar.getInstance(cityTimeZone)
+                    .get(java.util.Calendar.HOUR_OF_DAY);
+            mHoursAhead.setText(((cityHour >= 6 && cityHour < 18) ? "\u2600\uFE0F " : "\uD83C\uDF19 ")
+                    + mHoursAhead.getText());
             }
         }
 
