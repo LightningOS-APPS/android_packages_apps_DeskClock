@@ -957,7 +957,16 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
             final AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             // Ensure the alarm fires even if the device is dozing.
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+            if (newState == AlarmInstance.FIRED_STATE) {
+                // Ring time: use an alarm-clock alarm so the ringing service may start
+                // from the background (needed when not installed as a system app).
+                final PendingIntent show = PendingIntent.getActivity(context, 0,
+                        new Intent(context, com.android.deskclock.DeskClock.class),
+                        PendingIntent.FLAG_IMMUTABLE);
+                am.setAlarmClock(new AlarmManager.AlarmClockInfo(timeInMillis, show), pendingIntent);
+            } else {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+            }
 
         }
 

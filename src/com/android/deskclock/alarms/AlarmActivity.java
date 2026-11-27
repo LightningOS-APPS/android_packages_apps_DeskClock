@@ -482,6 +482,7 @@ public class AlarmActivity extends BaseActivity
      * Perform snooze animation and send snooze intent.
      */
     private void snooze() {
+        if (mAlarmInstance != null) WakeStats.onSnooze(this, mAlarmInstance.mAlarmId);
         stopSunrise();
         mAlarmHandled = true;
         LOGGER.v("Snoozed: %s", mAlarmInstance);
@@ -509,6 +510,7 @@ public class AlarmActivity extends BaseActivity
      * Perform dismiss animation and send dismiss intent.
      */
     private void dismissNow() {
+        if (mAlarmInstance != null) WakeStats.onDismiss(this, mAlarmInstance.mAlarmId);
         stopSunrise();
         mAlarmHandled = true;
         LOGGER.v("Dismissed: %s", mAlarmInstance);

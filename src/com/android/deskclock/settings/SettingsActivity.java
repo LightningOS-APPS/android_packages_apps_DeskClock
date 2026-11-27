@@ -97,6 +97,13 @@ public final class SettingsActivity extends ToolbarBaseActivity {
         public void onCreatePreferences(Bundle bundle, String rootKey) {
             getPreferenceManager().setStorageDeviceProtected();
             addPreferencesFromResource(R.xml.settings);
+            final androidx.preference.Preference wakeStats = findPreference("wake_stats");
+            if (wakeStats != null) {
+                wakeStats.setOnPreferenceClickListener(p -> {
+                    com.android.deskclock.alarms.WakeStats.show(requireContext());
+                    return true;
+                });
+            }
             final Preference timerVibrate = findPreference(KEY_TIMER_VIBRATE);
             final boolean hasVibrator = ((Vibrator) timerVibrate.getContext()
                     .getSystemService(VIBRATOR_SERVICE)).hasVibrator();

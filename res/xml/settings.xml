@@ -159,6 +159,11 @@
             android:dialogTitle="Wake-up challenge"
             app:useSimpleSummaryProvider="true" />
 
+        <Preference
+            android:key="wake_stats"
+            android:title="Wake-up stats"
+            android:summary="Snoozes and wake-up times for the last 30 days" />
+
     <SwitchPreferenceCompat
             android:key="sunrise_alarm"
             android:defaultValue="false"
