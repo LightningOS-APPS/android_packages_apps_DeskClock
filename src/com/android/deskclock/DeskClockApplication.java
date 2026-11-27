@@ -33,6 +33,7 @@ public class DeskClockApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        com.android.deskclock.alarms.Bedtime.schedule(this);
 
         final Context applicationContext = getApplicationContext();
         final SharedPreferences prefs = getDefaultSharedPreferences(applicationContext);

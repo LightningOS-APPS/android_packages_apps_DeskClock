@@ -317,5 +317,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
+        <receiver android:name="com.android.deskclock.alarms.Bedtime$Receiver"
+            android:exported="false" />
     </application>
 </manifest>

@@ -104,6 +104,18 @@ public final class SettingsActivity extends ToolbarBaseActivity {
                     return true;
                 });
             }
+            for (String k : new String[] {"bedtime_enabled", "bedtime_time"}) {
+                final androidx.preference.Preference bp = findPreference(k);
+                if (bp != null) {
+                    bp.setOnPreferenceChangeListener((p, v) -> {
+                        p.getPreferenceManager().getSharedPreferences().edit()
+                                .putString("_bedtime_touch", String.valueOf(System.nanoTime())).apply();
+                        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(
+                                () -> com.android.deskclock.alarms.Bedtime.schedule(requireContext()), 300);
+                        return true;
+                    });
+                }
+            }
             final Preference timerVibrate = findPreference(KEY_TIMER_VIBRATE);
             final boolean hasVibrator = ((Vibrator) timerVibrate.getContext()
                     .getSystemService(VIBRATOR_SERVICE)).hasVibrator();

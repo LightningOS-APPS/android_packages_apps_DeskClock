@@ -164,6 +164,21 @@
             android:title="Wake-up stats"
             android:summary="Snoozes and wake-up times for the last 30 days" />
 
+        <SwitchPreferenceCompat
+            android:key="bedtime_enabled"
+            android:defaultValue="false"
+            android:title="Bedtime reminder"
+            android:summary="A nightly reminder with how much sleep you'll get" />
+
+        <ListPreference
+            android:key="bedtime_time"
+            android:title="Bedtime"
+            android:defaultValue="22:30"
+            android:dependency="bedtime_enabled"
+            android:entries="@array/bedtime_times"
+            android:entryValues="@array/bedtime_times"
+            app:useSimpleSummaryProvider="true" />
+
     <SwitchPreferenceCompat
             android:key="sunrise_alarm"
             android:defaultValue="false"
