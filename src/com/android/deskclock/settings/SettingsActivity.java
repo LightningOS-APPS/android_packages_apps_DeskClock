@@ -104,6 +104,32 @@ public final class SettingsActivity extends ToolbarBaseActivity {
                     return true;
                 });
             }
+            final androidx.preference.Preference bedtimeTime = findPreference("bedtime_time");
+            if (bedtimeTime != null && bedtimeTime.getSharedPreferences() != null) {
+                final android.content.SharedPreferences sp = bedtimeTime.getSharedPreferences();
+                bedtimeTime.setSummary(sp.getString("bedtime_time", "22:30"));
+                bedtimeTime.setOnPreferenceClickListener(p -> {
+                    final String[] hm = sp.getString("bedtime_time", "22:30").split(":");
+                    final com.google.android.material.timepicker.MaterialTimePicker picker =
+                            new com.google.android.material.timepicker.MaterialTimePicker.Builder()
+                                    .setTimeFormat(android.text.format.DateFormat.is24HourFormat(requireContext())
+                                            ? com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+                                            : com.google.android.material.timepicker.TimeFormat.CLOCK_12H)
+                                    .setHour(Integer.parseInt(hm[0]))
+                                    .setMinute(Integer.parseInt(hm[1]))
+                                    .setTitleText("Bedtime")
+                                    .build();
+                    picker.addOnPositiveButtonClickListener(v -> {
+                        final String t = String.format(java.util.Locale.US, "%02d:%02d",
+                                picker.getHour(), picker.getMinute());
+                        sp.edit().putString("bedtime_time", t).apply();
+                        bedtimeTime.setSummary(t);
+                        com.android.deskclock.alarms.Bedtime.schedule(requireContext());
+                    });
+                    picker.show(getChildFragmentManager(), "bedtime_picker");
+                    return true;
+                });
+            }
             for (String k : new String[] {"bedtime_enabled", "bedtime_time"}) {
                 final androidx.preference.Preference bp = findPreference(k);
                 if (bp != null) {

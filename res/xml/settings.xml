@@ -170,14 +170,10 @@
             android:title="Bedtime reminder"
             android:summary="A nightly reminder with how much sleep you'll get" />
 
-        <ListPreference
+        <Preference
             android:key="bedtime_time"
             android:title="Bedtime"
-            android:defaultValue="22:30"
-            android:dependency="bedtime_enabled"
-            android:entries="@array/bedtime_times"
-            android:entryValues="@array/bedtime_times"
-            app:useSimpleSummaryProvider="true" />
+            android:dependency="bedtime_enabled" />
 
     <SwitchPreferenceCompat
             android:key="sunrise_alarm"
