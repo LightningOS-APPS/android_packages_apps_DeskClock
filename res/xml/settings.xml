@@ -151,11 +151,13 @@
             android:key="week_start"
             android:title="@string/week_start_title"
             app:iconSpaceReserved="false"  />
-        <SwitchPreferenceCompat
-            android:key="maths_challenge"
-            android:defaultValue="false"
-            android:title="Maths challenge"
-            android:summary="Solve a sum before an alarm can be dismissed" />
+        <ListPreference
+            android:key="wake_challenge"
+            android:title="Wake-up challenge"
+            android:entries="@array/wake_challenge_entries"
+            android:entryValues="@array/wake_challenge_values"
+            android:dialogTitle="Wake-up challenge"
+            app:useSimpleSummaryProvider="true" />
 
     <SwitchPreferenceCompat
             android:key="sunrise_alarm"

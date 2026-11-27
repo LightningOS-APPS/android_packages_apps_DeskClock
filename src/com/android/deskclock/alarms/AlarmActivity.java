@@ -655,11 +655,14 @@ public class AlarmActivity extends BaseActivity
         return alertAnimator;
     }
     private void dismiss() {
-        if (!mathsChallengeEnabled()) {
-            dismissNow();
-            return;
+        String mode = prefString("wake_challenge");
+        if (mode == null) mode = mathsChallengeEnabled() ? "maths" : "none";
+        switch (mode) {
+            case "maths": showMathsChallenge(); break;
+            case "shake": showShakeChallenge(); break;
+            case "phrase": showPhraseChallenge(); break;
+            default: dismissNow();
         }
-        showMathsChallenge();
     }
 
     private boolean mathsChallengeEnabled() {
@@ -744,5 +747,97 @@ public class AlarmActivity extends BaseActivity
             mSunrise.cancel();
             mSunrise = null;
         }
+    }
+    private String prefString(String key) {
+        try {
+            final String v = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+                    createDeviceProtectedStorageContext()).getString(key, null);
+            if (v != null) return v;
+        } catch (Exception ignored) { }
+        try {
+            return androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(key, null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void showShakeChallenge() {
+        final int target = 30;
+        final int[] count = {0};
+        final long[] last = {0};
+        final android.hardware.SensorManager sm =
+                (android.hardware.SensorManager) getSystemService(SENSOR_SERVICE);
+        final android.hardware.Sensor acc = sm == null ? null
+                : sm.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
+        if (acc == null) { showMathsChallenge(); return; }
+
+        final android.widget.TextView counter = new android.widget.TextView(this);
+        counter.setTextSize(40);
+        counter.setGravity(android.view.Gravity.CENTER);
+        counter.setPadding(0, 48, 0, 48);
+        counter.setText("0 / " + target);
+
+        final android.app.AlertDialog[] dlg = new android.app.AlertDialog[1];
+        final android.hardware.SensorEventListener l = new android.hardware.SensorEventListener() {
+            @Override
+            public void onSensorChanged(android.hardware.SensorEvent e) {
+                final float x = e.values[0], y = e.values[1], z = e.values[2];
+                final double g = Math.sqrt(x * x + y * y + z * z) - 9.81;
+                final long now = System.currentTimeMillis();
+                if (g > 12 && now - last[0] > 250) {
+                    last[0] = now;
+                    count[0]++;
+                    counter.setText(count[0] + " / " + target);
+                    if (count[0] >= target) {
+                        sm.unregisterListener(this);
+                        if (dlg[0] != null) dlg[0].dismiss();
+                        dismissNow();
+                    }
+                }
+            }
+            @Override
+            public void onAccuracyChanged(android.hardware.Sensor s, int a) { }
+        };
+        dlg[0] = new android.app.AlertDialog.Builder(this)
+                .setTitle("Shake your phone!")
+                .setView(counter)
+                .setCancelable(false)
+                .setNeutralButton("Snooze", (x, w) -> { sm.unregisterListener(l); snooze(); })
+                .create();
+        dlg[0].show();
+        sm.registerListener(l, acc, android.hardware.SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    private void showPhraseChallenge() {
+        final String[] phrases = {
+                "I am awake and getting up",
+                "Today is going to be a good day",
+                "No more snoozing for me",
+                "Rise and shine it is morning"};
+        final String phrase = phrases[new java.util.Random().nextInt(phrases.length)];
+        final android.widget.EditText input = new android.widget.EditText(this);
+        input.setHint(phrase);
+        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+        final android.app.AlertDialog d = new android.app.AlertDialog.Builder(this)
+                .setTitle("Type: " + phrase)
+                .setView(input)
+                .setCancelable(false)
+                .setPositiveButton("Dismiss", null)
+                .setNeutralButton("Snooze", (x, w) -> snooze())
+                .create();
+        d.setOnShowListener(x -> d.getButton(android.content.DialogInterface.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
+                    final String typed = input.getText().toString().trim().replaceAll("\\s+", " ");
+                    if (typed.equalsIgnoreCase(phrase)) {
+                        d.dismiss();
+                        dismissNow();
+                    } else {
+                        input.setError("Not quite. Check the spelling.");
+                    }
+                }));
+        d.show();
     }
 }
