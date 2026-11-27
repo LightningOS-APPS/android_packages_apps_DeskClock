@@ -329,4 +329,13 @@
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>
     </style>
+    <style name="Widget.DeskClock.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="android:layout_margin">12dp</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.DeskClock.Snackbar</item>
+    </style>
+
+    <style name="ShapeAppearance.DeskClock.Snackbar" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>

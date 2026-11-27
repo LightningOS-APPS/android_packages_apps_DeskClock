@@ -18,6 +18,9 @@
 <resources>
 
     <style name="Theme.DeskClock" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
+        <item name="snackbarStyle">@style/Widget.DeskClock.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.Material3.Snackbar.TextView</item>
+        <item name="snackbarButtonStyle">@style/Widget.Material3.Button.TextButton.Snackbar</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.DeskClock.Title</item>
         <item name="textAppearanceHeadlineSmall">@style/TextAppearance.DeskClock.Title</item>
         <item name="textAppearanceHeadlineMedium">@style/TextAppearance.DeskClock.Title</item>
