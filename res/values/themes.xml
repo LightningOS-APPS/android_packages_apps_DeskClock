@@ -18,6 +18,8 @@
 <resources>
 
     <style name="Theme.DeskClock" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
+        <item name="android:windowLightStatusBar">@bool/light_system_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/light_system_bars</item>
         <item name="snackbarStyle">@style/Widget.DeskClock.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Widget.Material3.Snackbar.TextView</item>
         <item name="snackbarButtonStyle">@style/Widget.Material3.Button.TextButton.Snackbar</item>
