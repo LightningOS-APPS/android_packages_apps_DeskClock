@@ -129,4 +129,17 @@ public final class WakeStats {
         box.addView(summary);
         b.setView(box).show();
     }
+    /** True when a wake-up challenge (maths, shake, phrase) is selected. */
+    public static boolean challengeOn(Context c) {
+        final Context[] ctxs = {c.createDeviceProtectedStorageContext(), c};
+        for (Context x : ctxs) {
+            try {
+                final SharedPreferences p = androidx.preference.PreferenceManager.getDefaultSharedPreferences(x);
+                final String mode = p.getString("wake_challenge", null);
+                if (mode != null) return !"none".equals(mode);
+                if (p.getBoolean("maths_challenge", false)) return true;
+            } catch (Exception ignored) { }
+        }
+        return false;
+    }
 }

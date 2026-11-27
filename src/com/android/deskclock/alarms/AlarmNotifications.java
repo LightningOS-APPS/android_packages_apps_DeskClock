@@ -372,9 +372,11 @@ public final class AlarmNotifications {
         PendingIntent dismissPendingIntent = PendingIntent.getService(service,
                 ALARM_FIRING_NOTIFICATION_ID, dismissIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        notification.addAction(R.drawable.ic_alarm_off_24dp,
-                resources.getString(R.string.alarm_alert_dismiss_text),
-                dismissPendingIntent);
+        if (!WakeStats.challengeOn(service)) {
+            notification.addAction(R.drawable.ic_alarm_off_24dp,
+                    resources.getString(R.string.alarm_alert_dismiss_text),
+                    dismissPendingIntent);
+        }
 
         // Setup Content Action
         Intent contentIntent = AlarmInstance.createIntent(service, AlarmActivity.class,

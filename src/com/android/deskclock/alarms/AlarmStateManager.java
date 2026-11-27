@@ -437,6 +437,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      */
     public static void setSnoozeState(final Context context, AlarmInstance instance,
             boolean showToast) {
+        WakeStats.onSnooze(context, instance.mAlarmId);
         // Stop alarm if this instance is firing it
         AlarmService.stopAlarm(context, instance);
 
@@ -555,6 +556,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @param instance to set state to
      */
     public static void deleteInstanceAndUpdateParent(Context context, AlarmInstance instance) {
+        if (instance.mAlarmState == AlarmInstance.FIRED_STATE || instance.mAlarmState == AlarmInstance.SNOOZE_STATE) {
+            WakeStats.onDismiss(context, instance.mAlarmId);
+        }
         LogUtils.i("Deleting instance " + instance.mId + " and updating parent alarm.");
 
         // Remove all other timers and notifications associated to it
