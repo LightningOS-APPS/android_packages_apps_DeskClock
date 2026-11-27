@@ -102,7 +102,7 @@ class TimerNotificationBuilder {
                 actions.add(new Action.Builder(null, title2, intent2).build());
             } else {
                 // Single timer is paused.
-                stateText = res.getString(R.string.timer_paused);
+                stateText = android.text.TextUtils.isEmpty(timer.getLabel()) ? res.getString(R.string.timer_paused) : timer.getLabel() + " \u00b7 " + res.getString(R.string.timer_paused);
 
                 // Left button: Start
                 final Intent start = new Intent(context, TimerService.class)
@@ -125,7 +125,7 @@ class TimerNotificationBuilder {
         } else {
             if (running) {
                 // At least one timer is running.
-                stateText = res.getString(R.string.timers_in_use, count);
+                stateText = timerNames(unexpired, res.getString(R.string.timers_in_use, count));
             } else {
                 // All timers are paused.
                 stateText = res.getString(R.string.timers_stopped, count);
@@ -172,6 +172,17 @@ class TimerNotificationBuilder {
         }
 
         NotificationUtils.createChannel(context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID);
+        notification.setContentTitle(stateText);
+        long soonest = Long.MAX_VALUE;
+        for (Timer t : unexpired) {
+            if (t.isRunning()) soonest = Math.min(soonest, t.getRemainingTime());
+        }
+        if (soonest != Long.MAX_VALUE) {
+            notification.setShowWhen(true)
+                    .setUsesChronometer(true)
+                    .setChronometerCountDown(true)
+                    .setWhen(System.currentTimeMillis() + soonest);
+        }
         return notification.build();
     }
 
@@ -331,5 +342,16 @@ class TimerNotificationBuilder {
 
         // Chronometer will/did reach 0:00 adjustedRemaining milliseconds from now.
         return System.currentTimeMillis() + adjustedRemaining;
+    }
+    private static String timerNames(List<Timer> timers, String fallback) {
+        final StringBuilder sb = new StringBuilder();
+        for (Timer t : timers) {
+            final String l = t.getLabel();
+            if (!android.text.TextUtils.isEmpty(l)) {
+                if (sb.length() > 0) sb.append(", ");
+                sb.append(l);
+            }
+        }
+        return sb.length() == 0 ? fallback : sb.toString();
     }
 }
