@@ -73,34 +73,57 @@ public final class AlarmDates {
         final long cur = get(c, alarm.id);
         if (cur > 0) start.setTimeInMillis(cur);
 
-        final DatePickerDialog dlg = new DatePickerDialog(c, (view, y, m, day) -> {
-            final Calendar sel = Calendar.getInstance();
-            sel.clear();
-            sel.set(y, m, day);
-            prefs(c).edit().putLong("a" + alarm.id, sel.getTimeInMillis()).apply();
-            String status = "alarm is off";
+        final androidx.fragment.app.FragmentActivity act = activityOf(c);
+        if (act == null) return;
+        final java.util.TimeZone utc = java.util.TimeZone.getTimeZone("UTC");
+        final Calendar initUtc = Calendar.getInstance(utc);
+        initUtc.clear();
+        initUtc.set(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH));
+        final Calendar now = Calendar.getInstance();
+        final Calendar todayUtc = Calendar.getInstance(utc);
+        todayUtc.clear();
+        todayUtc.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+
+        final com.google.android.material.datepicker.MaterialDatePicker.Builder<Long> builder =
+                com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker()
+                        .setTitleText(c.getString(com.android.deskclock.R.string.cl_pick_date))
+                        .setSelection(initUtc.getTimeInMillis())
+                        .setCalendarConstraints(
+                                new com.google.android.material.datepicker.CalendarConstraints.Builder()
+                                        .setStart(todayUtc.getTimeInMillis())
+                                        .setValidator(com.google.android.material.datepicker
+                                                .DateValidatorPointForward.from(todayUtc.getTimeInMillis()))
+                                        .build());
+        if (cur > 0) builder.setNegativeButtonText(c.getString(com.android.deskclock.R.string.cl_clear));
+        final com.google.android.material.datepicker.MaterialDatePicker<Long> picker = builder.build();
+
+        picker.addOnPositiveButtonClickListener(sel -> {
+            final Calendar u = Calendar.getInstance(utc);
+            u.setTimeInMillis(sel);
+            final Calendar day = Calendar.getInstance();
+            day.clear();
+            day.set(u.get(Calendar.YEAR), u.get(Calendar.MONTH), u.get(Calendar.DAY_OF_MONTH));
+            prefs(c).edit().putLong("a" + alarm.id, day.getTimeInMillis()).apply();
             if (inst != null) {
-                status = applyStatus(c, inst);
+                applyStatus(c, inst);
                 try {
                     AlarmStateManager.registerInstance(c, inst, true);
-                } catch (Exception e) {
-                    status += " / register error: " + e;
-                }
-                status += " / now: " + DateFormat.format("EEE d MMM HH:mm", inst.getAlarmTime());
+                } catch (Exception ignored) { }
             }
-            if (after != null) after.run();
-            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_alarm_set_for) + DateFormat.format("EEE d MMM", sel)
+            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_alarm_set_for)
+                    + DateFormat.format("EEE d MMM", day)
                     + (inst == null ? c.getString(com.android.deskclock.R.string.cl_turn_on_to_activate) : ""),
                     Toast.LENGTH_LONG).show();
-        }, start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH));
-        dlg.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        dlg.setButton(DialogInterface.BUTTON_NEUTRAL, c.getString(com.android.deskclock.R.string.cl_clear), (d, w) -> {
-            prefs(c).edit().remove("a" + alarm.id).apply();
             if (after != null) after.run();
-            Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_date_cleared),
-                    Toast.LENGTH_LONG).show();
         });
-        dlg.show();
+        if (cur > 0) {
+            picker.addOnNegativeButtonClickListener(v -> {
+                prefs(c).edit().remove("a" + alarm.id).apply();
+                Toast.makeText(c, c.getString(com.android.deskclock.R.string.cl_date_cleared), Toast.LENGTH_LONG).show();
+                if (after != null) after.run();
+            });
+        }
+        picker.show(act.getSupportFragmentManager(), "alarm_date");
     }
     /** "Tomorrow" or "Sat 28 Nov" for a dated one-time alarm; otherwise the fallback text. */
     public static String label(Context c, Alarm alarm, String fallback) {
@@ -125,5 +148,14 @@ public final class AlarmDates {
         } catch (Exception e) {
             return fallback;
         }
+    }
+    private static androidx.fragment.app.FragmentActivity activityOf(Context c) {
+        while (c instanceof android.content.ContextWrapper) {
+            if (c instanceof androidx.fragment.app.FragmentActivity) {
+                return (androidx.fragment.app.FragmentActivity) c;
+            }
+            c = ((android.content.ContextWrapper) c).getBaseContext();
+        }
+        return null;
     }
 }
