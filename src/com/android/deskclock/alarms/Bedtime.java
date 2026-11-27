@@ -21,7 +21,7 @@ import java.util.Locale;
 /** Nightly "time for bed" reminder. */
 public final class Bedtime {
 
-    private static final String CHANNEL = "bedtime";
+    private static final String CHANNEL = "bedtime_popup";
     private static final int NOTIF_ID = 7301;
 
     private Bedtime() { }
@@ -81,8 +81,9 @@ public final class Bedtime {
     static void notifyNow(Context c) {
         final NotificationManager nm = c.getSystemService(NotificationManager.class);
         if (nm == null) return;
+        nm.deleteNotificationChannel("bedtime");
         nm.createNotificationChannel(new NotificationChannel(CHANNEL, "Bedtime",
-                NotificationManager.IMPORTANCE_DEFAULT));
+                NotificationManager.IMPORTANCE_HIGH));
 
         String text = "Time to wind down.";
         final AlarmManager am = c.getSystemService(AlarmManager.class);
@@ -107,6 +108,8 @@ public final class Bedtime {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setContentIntent(open)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .build());
     }
 
