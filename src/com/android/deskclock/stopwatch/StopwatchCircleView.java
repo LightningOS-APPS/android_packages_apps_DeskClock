@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -108,7 +109,7 @@ public final class StopwatchCircleView extends View {
         // If a reference lap does not exist or should not be drawn, draw a simple white circle.
         if (laps.isEmpty() || !DataModel.getDataModel().canAddMoreLaps()) {
             // Draw a complete white circle; no red arc required.
-            canvas.drawCircle(xCenter, yCenter, radius, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, 0, 360, mPaint);
 
             // No need to continue animating the plain white circle.
             return;
@@ -130,12 +131,12 @@ public final class StopwatchCircleView extends View {
         final float redPercent = (float) currentLapTime / (float) firstLapTime;
         final float whitePercent = 1 - (redPercent > 1 ? 1 : redPercent);
         // Draw a white arc to indicate the amount of reference lap that remains.
-        canvas.drawArc(mArcRect, 270 + (1 - whitePercent) * 360, whitePercent * 360, false, mPaint);
+        drawWavyArc(canvas, xCenter, yCenter, radius, 270 + (1 - whitePercent) * 360, whitePercent * 360, mPaint);
         // Draw a red arc to indicate the amount of reference lap completed.
 
         // Draw an arc to indicate the amount of reference lap completed.
         mPaint.setColor(mCompletedColor);
-        canvas.drawArc(mArcRect, 270, redPercent * 360 , false, mPaint);
+        drawWavyArc(canvas, xCenter, yCenter, radius, 270, redPercent * 360, mPaint);
 
         // Starting on lap 2, a marker can be drawn indicating where the prior lap ended.
         if (lapCount > 1) {
@@ -144,14 +145,14 @@ public final class StopwatchCircleView extends View {
             final float markerAngle = (float) priorLap.getLapTime() / (float) firstLapTime * 360;
             final float startAngle = 270 + markerAngle;
             final float sweepAngle = mScreenDensity * (float) (360 / (radius * Math.PI));
-            canvas.drawArc(mArcRect, startAngle, sweepAngle, false, mPaint);
+            drawWavyArc(canvas, xCenter, yCenter, radius, startAngle, sweepAngle, mPaint);
         }
 
         // Draw a red dot to indicate current position relative to reference lap.
         final float dotAngleDegrees = 270 + redPercent * 360;
         final double dotAngleRadians = Math.toRadians(dotAngleDegrees);
-        final float dotX = xCenter + (float) (radius * Math.cos(dotAngleRadians));
-        final float dotY = yCenter + (float) (radius * Math.sin(dotAngleRadians));
+        final float dotX = xCenter + (float) (waveRadius(radius, dotAngleRadians) * Math.cos(dotAngleRadians));
+        final float dotY = yCenter + (float) (waveRadius(radius, dotAngleRadians) * Math.sin(dotAngleRadians));
         canvas.drawCircle(dotX, dotY, mDotRadius, mFill);
 
         // If the stopwatch is not running it does not require continuous updates.
@@ -166,5 +167,29 @@ public final class StopwatchCircleView extends View {
 
     private List<Lap> getLaps() {
         return DataModel.getDataModel().getLaps();
+    }
+    private final Path mWavePath = new Path();
+
+    private float waveRadius(float r, double angleRadians) {
+        final float amp = 2.5f * mScreenDensity;
+        return (float) (r - amp + amp * Math.sin(20 * angleRadians));
+    }
+
+    private void drawWavyArc(Canvas canvas, float cx, float cy, float r,
+            float startDeg, float sweepDeg, Paint paint) {
+        final float amp = 2.5f * mScreenDensity;
+        final int waves = 20;
+        final float base = r - amp;
+        final int steps = Math.max(2, (int) (Math.abs(sweepDeg) * 2));
+        mWavePath.reset();
+        for (int i = 0; i <= steps; i++) {
+            final double a = Math.toRadians(startDeg + sweepDeg * i / steps);
+            final double rr = base + amp * Math.sin(waves * a);
+            final float x = (float) (cx + rr * Math.cos(a));
+            final float y = (float) (cy + rr * Math.sin(a));
+            if (i == 0) mWavePath.moveTo(x, y); else mWavePath.lineTo(x, y);
+        }
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        canvas.drawPath(mWavePath, paint);
     }
 }
