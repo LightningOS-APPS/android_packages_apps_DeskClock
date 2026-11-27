@@ -59,6 +59,10 @@ public final class AlarmDates {
 
     /** Shows a date picker for a one-time alarm. */
     public static void pick(Context c, Alarm alarm, AlarmInstance inst) {
+        pick(c, alarm, inst, null);
+    }
+
+    public static void pick(Context c, Alarm alarm, AlarmInstance inst, Runnable after) {
         if (alarm == null) return;
         if (alarm.daysOfWeek.isRepeating()) {
             Toast.makeText(c, "Dates are for one-time alarms. Turn off the repeat days first.",
@@ -85,6 +89,7 @@ public final class AlarmDates {
                 status += " / now: " + DateFormat.format("EEE d MMM HH:mm", inst.getAlarmTime());
             }
             if (status.contains("error")) Toast.makeText(c, status, Toast.LENGTH_LONG).show();
+            if (after != null) after.run();
             Toast.makeText(c, "Alarm set for " + DateFormat.format("EEE d MMM", sel)
                     + (inst == null ? ". Turn the alarm on to activate it." : ""),
                     Toast.LENGTH_LONG).show();
@@ -92,6 +97,7 @@ public final class AlarmDates {
         dlg.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         dlg.setButton(DialogInterface.BUTTON_NEUTRAL, "Clear", (d, w) -> {
             prefs(c).edit().remove("a" + alarm.id).apply();
+            if (after != null) after.run();
             Toast.makeText(c, "Date cleared. Turn the alarm off and on to reset it.",
                     Toast.LENGTH_LONG).show();
         });

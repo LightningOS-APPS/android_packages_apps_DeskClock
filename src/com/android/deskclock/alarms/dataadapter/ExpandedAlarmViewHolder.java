@@ -143,6 +143,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
     @Override
     protected void onBindItemView(final AlarmItemHolder itemHolder) {
+        bindChooseDate(itemHolder.item);
         super.onBindItemView(itemHolder);
 
         final Alarm alarm = itemHolder.item;
@@ -427,5 +428,20 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
             final View itemView = mLayoutInflater.inflate(viewType, parent, false);
             return new ExpandedAlarmViewHolder(itemView, mHasVibrator);
         }
+    }
+    private void bindChooseDate(com.android.deskclock.provider.Alarm alarm) {
+        final android.widget.TextView row = itemView.findViewById(R.id.choose_date);
+        if (row == null || alarm == null) return;
+        final boolean show = !alarm.daysOfWeek.isRepeating();
+        row.setVisibility(show ? android.view.View.VISIBLE : android.view.View.GONE);
+        if (!show) return;
+        final android.content.Context ctx = row.getContext();
+        final Runnable refresh = () -> {
+            final String l = com.android.deskclock.alarms.AlarmDates.label(ctx, alarm, null);
+            row.setText(l == null ? "Pick date" : l);
+        };
+        refresh.run();
+        row.setOnClickListener(v -> com.android.deskclock.alarms.AlarmDates.pick(ctx,
+                getItemHolder().item, getItemHolder().getAlarmInstance(), refresh));
     }
 }
