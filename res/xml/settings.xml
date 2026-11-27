@@ -157,6 +157,12 @@
             android:title="Maths challenge"
             android:summary="Solve a sum before an alarm can be dismissed" />
 
+    <SwitchPreferenceCompat
+            android:key="sunrise_alarm"
+            android:defaultValue="false"
+            android:title="Sunrise alarm"
+            android:summary="Screen fades from night to sunrise while the alarm rings" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

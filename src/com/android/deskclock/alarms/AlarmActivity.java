@@ -213,6 +213,7 @@ public class AlarmActivity extends BaseActivity
 
         mCurrentHourColor = ThemeUtils.resolveColor(this, android.R.attr.windowBackground);
         getWindow().setBackgroundDrawable(new ColorDrawable(mCurrentHourColor));
+        startSunrise();
 
         mAlarmButton.setOnTouchListener(this);
         mSnoozeButton.setOnClickListener(this);
@@ -481,6 +482,7 @@ public class AlarmActivity extends BaseActivity
      * Perform snooze animation and send snooze intent.
      */
     private void snooze() {
+        stopSunrise();
         mAlarmHandled = true;
         LOGGER.v("Snoozed: %s", mAlarmInstance);
 
@@ -507,6 +509,7 @@ public class AlarmActivity extends BaseActivity
      * Perform dismiss animation and send dismiss intent.
      */
     private void dismissNow() {
+        stopSunrise();
         mAlarmHandled = true;
         LOGGER.v("Dismissed: %s", mAlarmInstance);
 
@@ -701,5 +704,45 @@ public class AlarmActivity extends BaseActivity
                     }
                 }));
         d.show();
+    }
+    private android.animation.ValueAnimator mSunrise;
+
+    private boolean prefBool(String key) {
+        try {
+            if (androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+                    createDeviceProtectedStorageContext()).getBoolean(key, false)) {
+                return true;
+            }
+        } catch (Exception ignored) { }
+        try {
+            return androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                    .getBoolean(key, false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void startSunrise() {
+        if (!prefBool("sunrise_alarm")) return;
+        final int[] sky = {0xFF101A3A, 0xFF7A3A22, 0xFFD9653B, 0xFFF0A04B};
+        final ColorDrawable bg = new ColorDrawable(sky[0]);
+        getWindow().setBackgroundDrawable(bg);
+        final android.animation.ArgbEvaluator argb = new android.animation.ArgbEvaluator();
+        mSunrise = android.animation.ValueAnimator.ofFloat(0f, sky.length - 1);
+        mSunrise.setDuration(60_000);
+        mSunrise.setInterpolator(new android.view.animation.LinearInterpolator());
+        mSunrise.addUpdateListener(a -> {
+            final float v = (float) a.getAnimatedValue();
+            final int i = Math.min((int) v, sky.length - 2);
+            bg.setColor((int) argb.evaluate(v - i, sky[i], sky[i + 1]));
+        });
+        mSunrise.start();
+    }
+
+    private void stopSunrise() {
+        if (mSunrise != null) {
+            mSunrise.cancel();
+            mSunrise = null;
+        }
     }
 }
