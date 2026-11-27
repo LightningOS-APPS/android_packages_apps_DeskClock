@@ -20,6 +20,8 @@
 
     <TextClock
         android:id="@+id/clock"
+        android:fontFamily="@font/google_sans"
+        android:textStyle="bold"
         android:textAppearance="?appWidgetTextAppearancePrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,6 +44,7 @@
 
         <TextClock
             android:id="@+id/date"
+        android:fontFamily="@font/google_sans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

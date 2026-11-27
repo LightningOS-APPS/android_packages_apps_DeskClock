@@ -31,6 +31,8 @@
 
     <TextClock
         android:id="@+id/clock"
+        android:fontFamily="@font/google_sans"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -52,6 +54,7 @@
 
         <TextClock
             android:id="@+id/date"
+        android:fontFamily="@font/google_sans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -79,6 +82,7 @@
 
         <TextView
             android:id="@+id/nextAlarm"
+        android:fontFamily="@font/google_sans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
