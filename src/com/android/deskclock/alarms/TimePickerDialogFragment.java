@@ -63,6 +63,27 @@ public class TimePickerDialogFragment extends DialogFragment {
     }
 
     public static void show(Fragment parentFragment, int hourOfDay, int minute) {
+        if (parentFragment instanceof OnTimeSetListener) {
+            final FragmentManager fm = parentFragment.getChildFragmentManager();
+            if (fm.isDestroyed()) return;
+            final Calendar now = Calendar.getInstance();
+            final int h = (hourOfDay >= 0 && hourOfDay < 24) ? hourOfDay : now.get(Calendar.HOUR_OF_DAY);
+            final int m = (minute >= 0 && minute < 60) ? minute : now.get(Calendar.MINUTE);
+            final com.google.android.material.timepicker.MaterialTimePicker picker =
+                    new com.google.android.material.timepicker.MaterialTimePicker.Builder()
+                            .setTimeFormat(DateFormat.is24HourFormat(parentFragment.requireContext())
+                                    ? com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+                                    : com.google.android.material.timepicker.TimeFormat.CLOCK_12H)
+                            .setHour(h)
+                            .setMinute(m)
+                            .setTitleText("Set alarm time")
+                            .build();
+            final OnTimeSetListener listener = (OnTimeSetListener) parentFragment;
+            picker.addOnPositiveButtonClickListener(
+                    v -> listener.onTimeSet(picker.getHour(), picker.getMinute()));
+            picker.show(fm, TAG + "_material");
+            return;
+        }
         if (!(parentFragment instanceof OnTimeSetListener)) {
             throw new IllegalArgumentException("Fragment must implement OnTimeSetListener");
         }
